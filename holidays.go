@@ -107,6 +107,17 @@ func (hs Holidays) PrevHoliday(t time.Time) *Holiday {
 	return nil
 }
 
+// Between returns the holidays that exist between t1 and t2.
+func (hs Holidays) Between(t1, t2 time.Time) Holidays {
+	_hs := make(Holidays, 0)
+	for next := hs.NextHoliday(t1); next != nil && next.Time.Before(t2); {
+		_hs = append(_hs, next.Clone())
+		next = hs.NextHoliday(next.Time)
+	}
+	_hs.sort()
+	return _hs
+}
+
 func (hs Holidays) sort() {
 	sort.Slice(hs, func(i, j int) bool {
 		return hs[i].Time.Before(hs[j].Time)
