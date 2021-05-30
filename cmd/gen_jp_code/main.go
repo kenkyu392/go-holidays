@@ -32,6 +32,11 @@ import (
 var Holidays = holidays.Holidays{
 	%s
 }
+
+// SubstituteHolidays in Japan
+var SubstituteHolidays = holidays.Holidays{
+	%s
+}
 `
 )
 
@@ -69,17 +74,31 @@ func genCode(hs holidays.Holidays, ut time.Time) string {
 		return hs[i].Time.Before(hs[j].Time)
 	})
 	list := make([]string, 0)
+	list2 := make([]string, 0)
 	for _, h := range hs {
-		list = append(list,
-			fmt.Sprintf(
+		code := fmt.Sprintf(
+			`{Name: "%s", Time: time.Date(%d, %d, %d, 0, 0, 0, 0, JST)},`,
+			h.Name, h.Time.Year(), h.Time.Month(), h.Time.Day(),
+		)
+		if h.Name == "休日" {
+			if hs.IsHoliday(h.Time.AddDate(0, 0, 1)) != nil &&
+				hs.IsHoliday(h.Time.AddDate(0, 0, -1)) != nil {
+				h.Name = "国民の休日"
+			} else if prev := hs.PrevHoliday(h.Time); prev != nil {
+				h.Name = fmt.Sprintf("振替休日（%s）", prev.Name)
+			}
+			code = fmt.Sprintf(
 				`{Name: "%s", Time: time.Date(%d, %d, %d, 0, 0, 0, 0, JST)},`,
 				h.Name, h.Time.Year(), h.Time.Month(), h.Time.Day(),
-			),
-		)
+			)
+			list2 = append(list2, code)
+		}
+		list = append(list, code)
 	}
 	return fmt.Sprintf(tmpl,
 		ut.Format("2006/01/02"),
 		hs[0].Time.Format("2006/01/02"), hs[len(hs)-1].Time.Format("2006/01/02"),
 		strings.TrimSpace(strings.Join(list, "\n\t")),
+		strings.TrimSpace(strings.Join(list2, "\n\t")),
 	)
 }

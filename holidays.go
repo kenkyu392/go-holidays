@@ -89,9 +89,19 @@ func (hs Holidays) IsHoliday(t time.Time) *Holiday {
 
 // NextHoliday returns the next holiday after t.
 func (hs Holidays) NextHoliday(t time.Time) *Holiday {
-	for _, h := range hs {
-		if h.Time.After(t) {
-			return h.Clone()
+	for i := 0; i < len(hs); i++ {
+		if hs[i].Time.After(t) {
+			return hs[i].Clone()
+		}
+	}
+	return nil
+}
+
+// PrevHoliday returns the previous holiday before t.
+func (hs Holidays) PrevHoliday(t time.Time) *Holiday {
+	for i := len(hs) - 1; i >= 0; i-- {
+		if hs[i].Time.Before(t) {
+			return hs[i].Clone()
 		}
 	}
 	return nil
