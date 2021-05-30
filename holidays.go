@@ -75,8 +75,8 @@ func (hs Holidays) Clone() Holidays {
 // Range calls f sequentially for each h present in the hs.
 // If f returns false, range stops the iteration.
 func (hs Holidays) Range(f func(h *Holiday) bool) {
-	for _, h := range hs {
-		if !f(h.Clone()) {
+	for i := 0; i < len(hs); i++ {
+		if !f(hs[i].Clone()) {
 			break
 		}
 	}
