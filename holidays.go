@@ -14,6 +14,11 @@ type Holiday struct {
 	Time time.Time `json:"time"`
 }
 
+// String ...
+func (h *Holiday) String() string {
+	return h.Name
+}
+
 // Clone returns a new Holiday with the same value.
 func (h *Holiday) Clone() *Holiday {
 	return &Holiday{Name: h.Name, Time: h.Time}
