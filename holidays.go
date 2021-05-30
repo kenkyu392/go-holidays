@@ -10,18 +10,23 @@ import (
 
 // Holiday ...
 type Holiday struct {
-	Name string    `json:"name"`
-	Time time.Time `json:"time"`
+	Time time.Time         `json:"time"`
+	I18n map[string]string `json:"i18n"`
+	Lang string            `json:"lang"`
 }
 
 // String ...
 func (h *Holiday) String() string {
-	return h.Name
+	return h.I18n[h.Lang]
 }
 
 // Clone returns a new Holiday with the same value.
 func (h *Holiday) Clone() *Holiday {
-	return &Holiday{Name: h.Name, Time: h.Time}
+	i18n := make(map[string]string)
+	for k, v := range h.I18n {
+		i18n[k] = v
+	}
+	return &Holiday{Time: h.Time, I18n: i18n, Lang: h.Lang}
 }
 
 // Equal reports whether h and t represent the same date instant.

@@ -30,11 +30,11 @@ func main() {
 	newYearsDay := time.Date(2022, 1, 1, 0, 0, 0, 0, jp.JST)
 
 	h := jp.IsHoliday(healthAndSportsDay)
-	fmt.Printf("%s: %s\n", h.Time.Format("2006/01/02"), h.Name)
+	fmt.Printf("%s: %s\n", h.Time.Format("2006/01/02"), h.String())
 
 	hs := jp.Between(healthAndSportsDay, newYearsDay)
 	for _, h := range hs {
-		fmt.Printf("%s: %s\n", h.Time.Format("2006/01/02"), h.Name)
+		fmt.Printf("%s: %s\n", h.Time.Format("2006/01/02"), h.String())
 	}
 }
 ```

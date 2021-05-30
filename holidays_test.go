@@ -7,23 +7,70 @@ import (
 
 func TestHolidays(t *testing.T) {
 	hs := Holidays{
-		{Name: "元日", Time: time.Date(2021, 1, 1, 0, 0, 0, 0, time.UTC)},
-		{Name: "成人の日", Time: time.Date(2021, 1, 11, 0, 0, 0, 0, time.UTC)},
-		{Name: "建国記念の日", Time: time.Date(2021, 2, 11, 0, 0, 0, 0, time.UTC)},
-		{Name: "天皇誕生日", Time: time.Date(2021, 2, 23, 0, 0, 0, 0, time.UTC)},
-		{Name: "春分の日", Time: time.Date(2021, 3, 20, 0, 0, 0, 0, time.UTC)},
-		{Name: "昭和の日", Time: time.Date(2021, 4, 29, 0, 0, 0, 0, time.UTC)},
-		{Name: "憲法記念日", Time: time.Date(2021, 5, 3, 0, 0, 0, 0, time.UTC)},
-		{Name: "みどりの日", Time: time.Date(2021, 5, 4, 0, 0, 0, 0, time.UTC)},
-		{Name: "こどもの日", Time: time.Date(2021, 5, 5, 0, 0, 0, 0, time.UTC)},
-		{Name: "海の日", Time: time.Date(2021, 7, 22, 0, 0, 0, 0, time.UTC)},
-		{Name: "スポーツの日", Time: time.Date(2021, 7, 23, 0, 0, 0, 0, time.UTC)},
-		{Name: "山の日", Time: time.Date(2021, 8, 8, 0, 0, 0, 0, time.UTC)},
-		{Name: "振替休日（山の日）", Time: time.Date(2021, 8, 9, 0, 0, 0, 0, time.UTC)},
-		{Name: "敬老の日", Time: time.Date(2021, 9, 20, 0, 0, 0, 0, time.UTC)},
-		{Name: "秋分の日", Time: time.Date(2021, 9, 23, 0, 0, 0, 0, time.UTC)},
-		{Name: "文化の日", Time: time.Date(2021, 11, 3, 0, 0, 0, 0, time.UTC)},
-		{Name: "勤労感謝の日", Time: time.Date(2021, 11, 23, 0, 0, 0, 0, time.UTC)},
+		{
+			Time: time.Date(2021, 7, 22, 0, 0, 0, 0, time.UTC),
+			I18n: map[string]string{
+				"ja-JP": "海の日",
+				"en-US": "Marine Day",
+			},
+			Lang: "ja-JP",
+		},
+		{
+			Time: time.Date(2021, 7, 23, 0, 0, 0, 0, time.UTC),
+			I18n: map[string]string{
+				"ja-JP": "スポーツの日",
+				"en-US": "Health and Sports Day",
+			},
+			Lang: "ja-JP",
+		},
+		{
+			Time: time.Date(2021, 8, 8, 0, 0, 0, 0, time.UTC),
+			I18n: map[string]string{
+				"ja-JP": "山の日",
+				"en-US": "Mountain Day",
+			},
+			Lang: "ja-JP",
+		},
+		{
+			Time: time.Date(2021, 8, 9, 0, 0, 0, 0, time.UTC),
+			I18n: map[string]string{
+				"ja-JP": "振替休日（山の日）",
+				"en-US": "Substitute Holiday (Mountain Day)",
+			},
+			Lang: "ja-JP",
+		},
+		{
+			Time: time.Date(2021, 9, 20, 0, 0, 0, 0, time.UTC),
+			I18n: map[string]string{
+				"ja-JP": "敬老の日",
+				"en-US": "Respect for the Aged Day",
+			},
+			Lang: "ja-JP",
+		},
+		{
+			Time: time.Date(2021, 9, 23, 0, 0, 0, 0, time.UTC),
+			I18n: map[string]string{
+				"ja-JP": "秋分の日",
+				"en-US": "Autumnal Equinox Day",
+			},
+			Lang: "ja-JP",
+		},
+		{
+			Time: time.Date(2021, 11, 3, 0, 0, 0, 0, time.UTC),
+			I18n: map[string]string{
+				"ja-JP": "文化の日",
+				"en-US": "Culture Day",
+			},
+			Lang: "ja-JP",
+		},
+		{
+			Time: time.Date(2021, 11, 23, 0, 0, 0, 0, time.UTC),
+			I18n: map[string]string{
+				"ja-JP": "勤労感謝の日",
+				"en-US": "Labor Thanksgiving Day",
+			},
+			Lang: "ja-JP",
+		},
 	}
 
 	healthAndSportsDay := time.Date(2021, 7, 23, 1, 2, 3, 4, time.UTC)
@@ -32,7 +79,7 @@ func TestHolidays(t *testing.T) {
 	specialDay := time.Date(3000, 1, 1, 0, 0, 0, 0, time.UTC)
 
 	t.Run("String", func(t *testing.T) {
-		if want, got := "元日", hs[0].String(); want != got {
+		if want, got := "海の日", hs[0].String(); want != got {
 			t.Errorf(
 				"No match\nwant: %v\ngot : %v",
 				want, got,
@@ -86,7 +133,7 @@ func TestHolidays(t *testing.T) {
 
 	t.Run("Range", func(t *testing.T) {
 		_hs := make(Holidays, 0)
-		end := time.Date(2021, 4, 30, 0, 0, 0, 0, time.UTC)
+		end := time.Date(2021, 9, 30, 0, 0, 0, 0, time.UTC)
 		hs.Range(func(h *Holiday) bool {
 			f := h.Time.Before(end)
 			if f {
@@ -103,7 +150,10 @@ func TestHolidays(t *testing.T) {
 	})
 
 	t.Run("Add", func(t *testing.T) {
-		_hs := hs.Add(&Holiday{Name: "特別な日", Time: specialDay})
+		_hs := hs.Add(&Holiday{Time: specialDay, Lang: "ja-JP", I18n: map[string]string{
+			"ja-JP": "特別な日",
+			"en-US": "Special Day",
+		}})
 		if got := _hs.IsHoliday(specialDay); !got.Equal(specialDay) {
 			t.Errorf(
 				"Must be special day\nwant: %v\ngot : %v",

@@ -38,6 +38,14 @@ var SubstituteHolidays = holidays.Holidays{
 	%s
 }
 `
+	codeBlockTmpl = `{
+		Time: time.Date(%d, %d, %d, 0, 0, 0, 0, JST),
+		I18n: map[string]string{
+			"ja-JP": "%s",
+			"en-US": "%s",
+		},
+		Lang: "ja-JP",
+	},`
 )
 
 func main() {
@@ -77,20 +85,11 @@ func genCode(hs holidays.Holidays, ut time.Time) string {
 	list2 := make([]string, 0)
 	for _, h := range hs {
 		code := fmt.Sprintf(
-			`{Name: "%s", Time: time.Date(%d, %d, %d, 0, 0, 0, 0, JST)},`,
-			h.Name, h.Time.Year(), h.Time.Month(), h.Time.Day(),
+			codeBlockTmpl,
+			h.Time.Year(), h.Time.Month(), h.Time.Day(),
+			h.I18n["ja-JP"], h.I18n["en-US"],
 		)
-		if h.Name == "休日" {
-			if hs.IsHoliday(h.Time.AddDate(0, 0, 1)) != nil &&
-				hs.IsHoliday(h.Time.AddDate(0, 0, -1)) != nil {
-				h.Name = "国民の休日"
-			} else if prev := hs.PrevHoliday(h.Time); prev != nil {
-				h.Name = fmt.Sprintf("振替休日（%s）", prev.Name)
-			}
-			code = fmt.Sprintf(
-				`{Name: "%s", Time: time.Date(%d, %d, %d, 0, 0, 0, 0, JST)},`,
-				h.Name, h.Time.Year(), h.Time.Month(), h.Time.Day(),
-			)
+		if strings.HasPrefix(h.I18n["ja-JP"], "振替休日") {
 			list2 = append(list2, code)
 		}
 		list = append(list, code)
