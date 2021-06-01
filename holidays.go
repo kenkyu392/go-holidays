@@ -1,6 +1,6 @@
 package holidays
 
-//go:generate go run cmd/gen_jp_code/main.go
+//go:generate go run cmd/genjp/main.go
 //go:generate goimports -w .
 
 import (
