@@ -22,7 +22,7 @@ jobs:
 
       - name: Generate
         run: |
-          go get golang.org/x/tools/cmd/goimports
+          GO111MODULE=off go get golang.org/x/tools/cmd/goimports
           go generate
 
       - name: Count
