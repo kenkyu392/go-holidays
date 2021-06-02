@@ -29,6 +29,9 @@ func main() {
 	healthAndSportsDay := time.Date(2021, 7, 23, 0, 0, 0, 0, jp.JST)
 	newYearsDay := time.Date(2022, 1, 1, 0, 0, 0, 0, jp.JST)
 
+	// Change the display language to English.
+	// jp.Holidays.SetTag(language.English)
+
 	h := jp.IsHoliday(healthAndSportsDay)
 	fmt.Printf("%s: %s\n", h.Time.Format("2006/01/02"), h.String())
 
