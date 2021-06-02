@@ -3,73 +3,75 @@ package holidays
 import (
 	"testing"
 	"time"
+
+	"golang.org/x/text/language"
 )
 
 func TestHolidays(t *testing.T) {
 	hs := Holidays{
 		{
 			Time: time.Date(2021, 7, 22, 0, 0, 0, 0, time.UTC),
-			I18n: map[string]string{
-				"ja-JP": "海の日",
-				"en-US": "Marine Day",
+			I18n: map[language.Tag]string{
+				language.Japanese: "海の日",
+				language.English:  "Marine Day",
 			},
-			Lang: "ja-JP",
+			Tag: language.Japanese,
 		},
 		{
 			Time: time.Date(2021, 7, 23, 0, 0, 0, 0, time.UTC),
-			I18n: map[string]string{
-				"ja-JP": "スポーツの日",
-				"en-US": "Health and Sports Day",
+			I18n: map[language.Tag]string{
+				language.Japanese: "スポーツの日",
+				language.English:  "Health and Sports Day",
 			},
-			Lang: "ja-JP",
+			Tag: language.Japanese,
 		},
 		{
 			Time: time.Date(2021, 8, 8, 0, 0, 0, 0, time.UTC),
-			I18n: map[string]string{
-				"ja-JP": "山の日",
-				"en-US": "Mountain Day",
+			I18n: map[language.Tag]string{
+				language.Japanese: "山の日",
+				language.English:  "Mountain Day",
 			},
-			Lang: "ja-JP",
+			Tag: language.Japanese,
 		},
 		{
 			Time: time.Date(2021, 8, 9, 0, 0, 0, 0, time.UTC),
-			I18n: map[string]string{
-				"ja-JP": "振替休日（山の日）",
-				"en-US": "Substitute Holiday (Mountain Day)",
+			I18n: map[language.Tag]string{
+				language.Japanese: "振替休日（山の日）",
+				language.English:  "Substitute Holiday (Mountain Day)",
 			},
-			Lang: "ja-JP",
+			Tag: language.Japanese,
 		},
 		{
 			Time: time.Date(2021, 9, 20, 0, 0, 0, 0, time.UTC),
-			I18n: map[string]string{
-				"ja-JP": "敬老の日",
-				"en-US": "Respect for the Aged Day",
+			I18n: map[language.Tag]string{
+				language.Japanese: "敬老の日",
+				language.English:  "Respect for the Aged Day",
 			},
-			Lang: "ja-JP",
+			Tag: language.Japanese,
 		},
 		{
 			Time: time.Date(2021, 9, 23, 0, 0, 0, 0, time.UTC),
-			I18n: map[string]string{
-				"ja-JP": "秋分の日",
-				"en-US": "Autumnal Equinox Day",
+			I18n: map[language.Tag]string{
+				language.Japanese: "秋分の日",
+				language.English:  "Autumnal Equinox Day",
 			},
-			Lang: "ja-JP",
+			Tag: language.Japanese,
 		},
 		{
 			Time: time.Date(2021, 11, 3, 0, 0, 0, 0, time.UTC),
-			I18n: map[string]string{
-				"ja-JP": "文化の日",
-				"en-US": "Culture Day",
+			I18n: map[language.Tag]string{
+				language.Japanese: "文化の日",
+				language.English:  "Culture Day",
 			},
-			Lang: "ja-JP",
+			Tag: language.Japanese,
 		},
 		{
 			Time: time.Date(2021, 11, 23, 0, 0, 0, 0, time.UTC),
-			I18n: map[string]string{
-				"ja-JP": "勤労感謝の日",
-				"en-US": "Labor Thanksgiving Day",
+			I18n: map[language.Tag]string{
+				language.Japanese: "勤労感謝の日",
+				language.English:  "Labor Thanksgiving Day",
 			},
-			Lang: "ja-JP",
+			Tag: language.Japanese,
 		},
 	}
 
@@ -150,9 +152,9 @@ func TestHolidays(t *testing.T) {
 	})
 
 	t.Run("Add", func(t *testing.T) {
-		_hs := hs.Add(&Holiday{Time: specialDay, Lang: "ja-JP", I18n: map[string]string{
-			"ja-JP": "特別な日",
-			"en-US": "Special Day",
+		_hs := hs.Add(&Holiday{Time: specialDay, Tag: language.Japanese, I18n: map[language.Tag]string{
+			language.Japanese: "特別な日",
+			language.English:  "Special Day",
 		}})
 		if got := _hs.IsHoliday(specialDay); !got.Equal(specialDay) {
 			t.Errorf(

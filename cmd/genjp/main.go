@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/kenkyu392/go-holidays"
+	"golang.org/x/text/language"
 )
 
 const (
@@ -27,6 +28,7 @@ package jp
 import (
 	"time"
 	"github.com/kenkyu392/go-holidays"
+	"golang.org/x/text/language"
 )
 // Holidays in Japan
 // %s ~ %s
@@ -41,11 +43,11 @@ var SubstituteHolidays = holidays.Holidays{
 `
 	codeBlockTmpl = `{
 		Time: time.Date(%d, %d, %d, 0, 0, 0, 0, JST),
-		I18n: map[string]string{
-			"ja-JP": "%s",
-			"en-US": "%s",
+		I18n: map[language.Tag]string{
+			language.Japanese: "%s",
+			language.English: "%s",
 		},
-		Lang: "ja-JP",
+		Tag: language.Japanese,
 	},`
 )
 
@@ -95,8 +97,11 @@ func main() {
 	for _, h := range payload.Holidays {
 		hs = append(hs, &holidays.Holiday{
 			Time: h.Date,
-			I18n: h.I18n,
-			Lang: "ja-JP",
+			I18n: map[language.Tag]string{
+				language.Japanese: h.I18n["ja-JP"],
+				language.English:  h.I18n["en-US"],
+			},
+			Tag: language.Japanese,
 		})
 	}
 
@@ -117,9 +122,9 @@ func genCode(hs holidays.Holidays, ut time.Time) string {
 		code := fmt.Sprintf(
 			codeBlockTmpl,
 			h.Time.Year(), h.Time.Month(), h.Time.Day(),
-			h.I18n["ja-JP"], h.I18n["en-US"],
+			h.I18n[language.Japanese], h.I18n[language.English],
 		)
-		if strings.HasPrefix(h.I18n["ja-JP"], "振替休日") {
+		if strings.HasPrefix(h.I18n[language.Japanese], "振替休日") {
 			list2 = append(list2, code)
 		}
 		list = append(list, code)

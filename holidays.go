@@ -6,27 +6,29 @@ package holidays
 import (
 	"sort"
 	"time"
+
+	"golang.org/x/text/language"
 )
 
 // Holiday ...
 type Holiday struct {
-	Time time.Time         `json:"time"`
-	I18n map[string]string `json:"i18n"`
-	Lang string            `json:"lang"`
+	Time time.Time
+	I18n map[language.Tag]string
+	Tag  language.Tag
 }
 
 // String ...
 func (h *Holiday) String() string {
-	return h.I18n[h.Lang]
+	return h.I18n[h.Tag]
 }
 
 // Clone returns a new Holiday with the same value.
 func (h *Holiday) Clone() *Holiday {
-	i18n := make(map[string]string)
+	i18n := make(map[language.Tag]string)
 	for k, v := range h.I18n {
 		i18n[k] = v
 	}
-	return &Holiday{Time: h.Time, I18n: i18n, Lang: h.Lang}
+	return &Holiday{Time: h.Time, I18n: i18n, Tag: h.Tag}
 }
 
 // Equal reports whether h and t represent the same date instant.
@@ -38,6 +40,13 @@ func (h *Holiday) Equal(t time.Time) bool {
 
 // Holidays ...
 type Holidays []*Holiday
+
+// SetTag ...
+func (hs Holidays) SetTag(tag language.Tag) {
+	for _, h := range hs {
+		h.Tag = tag
+	}
+}
 
 // Add h and return a new instance.
 func (hs Holidays) Add(h ...*Holiday) Holidays {
