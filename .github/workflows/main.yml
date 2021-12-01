@@ -38,5 +38,5 @@ jobs:
           git add .
           git commit -m "Generate"
           git pull
-          git push origin master
+          git push origin main
         if: steps.changes.outputs.count > 0
