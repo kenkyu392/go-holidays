@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -18,7 +17,7 @@ import (
 )
 
 const (
-	url          = "https://kenkyu392.github.io/holidays-jp/v1/time.json"
+	url          = "https://kenkyu392.github.io/holidays-jp/v1/datetime.json"
 	appName      = "gen_jp_code"
 	codeDirName  = "jp"
 	codeFileName = "jp.gen.go"
@@ -106,7 +105,7 @@ func main() {
 	}
 
 	code := genCode(hs, lastModified)
-	if err := ioutil.WriteFile(outPath, []byte(code), os.ModePerm); err != nil {
+	if err := os.WriteFile(outPath, []byte(code), os.ModePerm); err != nil {
 		log.Fatal(err)
 	}
 	log.Printf("Generated '%s' from '%s'", outPath, url)
